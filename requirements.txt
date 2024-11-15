@@ -1,2 +1,4 @@
+pandas==2.2.3
 psycopg2_binary==2.9.10
 streamlit==1.39.0
+streamlit_option_menu==0.3.6
