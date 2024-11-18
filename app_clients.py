@@ -5,12 +5,13 @@ from streamlit_option_menu import option_menu
 import pandas as pd 
 
 def connect_db():
+    db_config = st.secrets["database"]
     conn = psycopg2.connect(
-        host="database-1.ctoc8qcc6ldb.eu-north-1.rds.amazonaws.com",  # RDS endpoint
-        database="beautyClinic",
-        user="postgres",
-        password="UKPOWEH22",
-        port=5432
+        host=db_config["host"],
+        database=db_config["database"],
+        user=db_config["user"],
+        password=db_config["password"],
+        port=db_config["port"]
     )
     return conn
 
@@ -73,25 +74,95 @@ def schedule_appointment(username, date, service_type, status="Scheduled"):
     except Exception as e:
         st.error(f"Error: {e}")
 
-st.markdown('''
-<style>
-body {
-background-image: url("https://marynassifchbat.com/wp-content/uploads/2018/11/9W8A0273-11-853x853.jpg");
-background-size: cover;
-}
-</style>
-''', unsafe_allow_html=True)
+
+st.set_page_config(
+    page_title="Booking Site",
+    layout="wide",
+    page_icon=":calendar:"
+)
 
 def main():
+
+    
    
     with st.sidebar:
         selected = option_menu(
             menu_title= "Main Menu",
             options=["Home", "Create your customer profile", "Schedule an Appointment"],
+            icons=["house", "box-arrow-right", "calendar-check"],
             default_index=0,
             menu_icon="cast",
 
         )
+    
+    if selected == "Home":
+        st.markdown(
+            """
+            <style>
+            .header-text {
+                text-align: center;
+                font-size: 2.5rem;
+                font-weight: bold;
+                color: #FF69B4;
+            }
+            .subtext {
+                text-align: center;
+                font-size: 1.2rem;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .info-box {
+                background-color: #fff3f8;
+                border: 1px solid #FF69B4;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 20px 0;
+                box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
+
+        st.markdown('<div class="header-text">Welcome to Mary Nassif Chbat Booking Site</div>', unsafe_allow_html=True)
+        st.image("cover.jpg", use_column_width=True, caption="Your Beauty is Our Speciality")
+
+        st.markdown(
+            """
+            <div class="subtext">
+            At Mary Nassif Chbat, we're committed to enhancing your beauty with top-notch services.
+            </div>
+            """, unsafe_allow_html=True
+        )
+
+        st.markdown(
+            """
+            <div class="info-box">
+            <p><strong>Working Hours:</strong> Monday to Friday, 9:00 AM - 5:00 PM</p>
+            <p>Head over to create your customer profile and book your appointment today!</p>
+            <p><strong>Contact Us:</strong> +961 1 895 168</p>
+            <p><em>We can't wait to beautify you!</em></p>
+            </div>
+            """, unsafe_allow_html=True
+        )
+        
+        st.markdown(
+            """
+            <div style="text-align: center; margin-top: 20px;">
+            <a href="https://example.com/book-now" target="_blank" style="
+                background-color: #FF69B4; 
+                color: white; 
+                padding: 10px 20px; 
+                text-decoration: none; 
+                border-radius: 5px; 
+                font-size: 1.2rem;">
+                Book an Appointment Now
+            </a>
+            </div>
+            """, unsafe_allow_html=True
+        )
+
+
+
     if selected=="Create your customer profile":
         with st.form("client_form"):
             st.subheader("Create your customer profile")
@@ -127,7 +198,7 @@ def main():
     
             # Dropdown to select a service
             service_dict = dict(zip(services["servicetype"], services["serviceid"]))
-            selected_service = st.selectbox("Service Type", options=list(service_dict.keys()))
+            selected_service = st.selectbox("The service you want to schedule an appointment for", options=list(service_dict.keys()))
 
             # Convert service name to ID
             service_id = service_dict[selected_service]
