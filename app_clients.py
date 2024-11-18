@@ -7,7 +7,7 @@ import pandas as pd
 def connect_db():
     conn = psycopg2.connect(
         host="database-1.ctoc8qcc6ldb.eu-north-1.rds.amazonaws.com",  # RDS endpoint
-        database="beautyClient",
+        database="beautyClinic",
         user="postgres",
         password="UKPOWEH22",
         port=5432
