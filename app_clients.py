@@ -8,7 +8,7 @@ def connect_db():
     db_config = st.secrets["database"]
     conn = psycopg2.connect(
         host=db_config["host"],
-        database=db_config["database"],
+        database=db_config["name"],
         user=db_config["user"],
         password=db_config["password"],
         port=db_config["port"]
